@@ -90,7 +90,7 @@ const Landing = () => {
 
               <div className="mt-5 w-10 h-10 bg-blue-900 hover:bg-white hover:text-[#1e2749] border-2 border-white rounded-xl flex items-center justify-center transition duration-300 ease-in-out hover:inset-shadow-sm hover:inset-shadow-indigo-500">
                 <a
-                  href="https://www.facebook.com/dionisio.t.minano"
+                  href="https://www.facebook.com/profile.php?id=100008790690017"
                   target="_blank"
                   className="text-4xl font-bold"
                 >

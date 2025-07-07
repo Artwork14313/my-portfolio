@@ -59,7 +59,7 @@ const Contact = () => {
             </li>
             <li>
               <a
-                href="https://www.facebook.com/dionisio.t.minano"
+                href="https://www.facebook.com/profile.php?id=100008790690017"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#1e2749] border-[#1e2749] border-2 hover:bg-[#1e2749] flex items-center hover:translate-x-10 hover:text-white px-5 py-1 rounded-lg hover:rounded-full space-x-2 transition duration-500 ease-in-out"
