@@ -10,11 +10,74 @@ export default function About() {
       </AnimatedSection>
       <div className="grid md:grid-cols-2 gap-10 items-start py-10">
         <AnimatedWrapper direction="left">
-          <img
-            src="/Me.jpg"
-            alt="Profile"
-            className="rounded-full w-48 h-48 object-cover mb-6 border-2 border-white mx-auto"
-          />
+          {/* ✅ MOBILE ONLY */}
+          <div className="block md:hidden w-48 h-48 mb-6 mx-auto rounded-[20px] overflow-hidden
+                border-2 border-white shadow-[0_20px_40px_rgba(0,0,0,0.25)]">
+            <img
+              src="/Me.jpg"
+              alt="Profile"
+              className="w-full h-full object-cover transition-transform duration-300 ease-out
+               scale-150"
+            />
+          </div>
+
+          <div className="hidden md:block">
+            <div className="group relative w-48 h-48 mb-6 mx-auto">
+
+              {/* TOP SLICE */}
+              <div
+                className="absolute inset-0 overflow-hidden rounded-[20px]
+               border-2 border-white shadow-[0_20px_40px_rgba(0,0,0,0.25)]
+               transition-all duration-500 ease-out
+               clip-top-third -translate-x-[40%]
+               group-hover:clip-full group-hover:translate-x-0"
+              >
+                <img
+                  src="/Me.jpg"
+                  alt=""
+                  className="w-full h-full object-cover saturate-50
+                 transition-all duration-500
+                 group-hover:saturate-100 group-hover:scale-150"
+                />
+              </div>
+
+              {/* MIDDLE SLICE */}
+              <div
+                className="absolute inset-0 overflow-hidden rounded-[20px]
+               border-2 border-white shadow-[0_20px_40px_rgba(0,0,0,0.25)]
+               transition-all duration-500 ease-out
+               clip-middle-third -translate-x-[5%] translate-y-[2%] group-hover:translate-y-0
+               group-hover:clip-full group-hover:translate-x-0"
+              >
+                <img
+                  src="/Me.jpg"
+                  alt=""
+                  className="w-full h-full object-cover saturate-50
+                 transition-all duration-500
+                 group-hover:saturate-100 group-hover:scale-150"
+                />
+              </div>
+
+              {/* BOTTOM SLICE */}
+              <div
+                className="absolute inset-0 overflow-hidden rounded-[20px]
+               border-2 border-white shadow-[0_20px_40px_rgba(0,0,0,0.25)]
+               transition-all duration-500 ease-out
+               clip-bottom-third translate-x-[35%] translate-y-[4%] group-hover:translate-y-0
+               group-hover:clip-full group-hover:translate-x-0"
+              >
+                <img
+                  src="/Me.jpg"
+                  alt=""
+                  className="w-full h-full object-cover saturate-50
+                 transition-all duration-500
+                 group-hover:saturate-100 group-hover:scale-150"
+                />
+              </div>
+
+            </div>
+
+          </div>
 
           <p className="text-md leading-relaxed text-center md:mx-20">
             I'm a Web Developer specializing in creating fast, responsive, and

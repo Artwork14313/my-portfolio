@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+.clip-top-third {
+  clip-path: inset(0 0 66.666% 0);
+}
+
+.clip-middle-third {
+  clip-path: inset(33.333% 0 33.333% 0);
+}
+
+.clip-bottom-third {
+  clip-path: inset(66.666% 0 0 0);
+}
+
+.clip-full {
+  clip-path: inset(0 0 0 0);
+}
+
+
+
 /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
