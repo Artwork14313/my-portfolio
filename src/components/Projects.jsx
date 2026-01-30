@@ -81,7 +81,7 @@ const Projects = () => {
                     </ul>
                   </div>
                   <a
-                    href="https://lodifhi.netlify.app"
+                    href="https://lodifhisagay.netlify.app"
                     target="_blank"
                     class="my-[6px] hover:bg-[#1e2749] hover:text-white bg-yellow-400 text-gray-900 px-4 py-2 rounded-md text-sm font-semibold transition  duration-300 ease-in-out"
                   >
