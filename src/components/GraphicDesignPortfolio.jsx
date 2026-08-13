@@ -70,7 +70,13 @@ const GraphicDesignPortfolio = () => {
               className="rounded shadow h-full"
             />
           </div>
-         
+         <div className="bg-white rounded-md shadow p-3 flex flex-col">
+            <img
+              src="/Screenshot 2026-08-13 170015.png"
+              alt="Design 8"
+              className="rounded shadow h-full"
+            />
+          </div>
           {/* Add more as needed */}
         </div>
       </div>
