@@ -119,13 +119,13 @@ export default function About() {
             <h3 className="text-2xl font-bold">Experience</h3>
             <p className="font-bold">Lopez District Farmers Hospital Inc.</p>
             <p className="text-sm text-gray-400">
-              IT Specialist | 2019 - to present
+              IT Specialist | 2019 to present
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Developed Hospital Website</li>
-              <li>Created Graphic Designs for Advertisement</li>
-              <li>Manage and Maintain IT infrastructure</li>
-              <li>Provide technical support to employees</li>
+              <li>Developed the hospital website</li>
+              <li>Created graphic designs for advertisements</li>
+              <li>Managed and maintain the IT infrastructure</li>
+              <li>Provided technical support to employees</li>
             </ul>
           </div>
 
