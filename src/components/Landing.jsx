@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowRight, Facebook, Linkedin } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import AnimatedWrapper from "./AnimatedWrapper";
@@ -12,6 +12,32 @@ const roles = [
 
 export default function Landing() {
   const [roleIndex, setRoleIndex] = useState(0);
+  const cardRef = useRef(null);
+
+  const handlePointerMove = (event) => {
+    const card = cardRef.current;
+    if (!card || event.pointerType !== "mouse") return;
+
+    const rect = card.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+
+    card.style.setProperty("--tilt-x", `${(-y * 8).toFixed(2)}deg`);
+    card.style.setProperty("--tilt-y", `${(x * 8).toFixed(2)}deg`);
+    card.style.setProperty("--shift-x", `${(-x * 14).toFixed(1)}px`);
+    card.style.setProperty("--shift-y", `${(-y * 14).toFixed(1)}px`);
+    card.style.setProperty("--glare-x", `${((x + 0.5) * 100).toFixed(0)}%`);
+    card.style.setProperty("--glare-y", `${((y + 0.5) * 100).toFixed(0)}%`);
+  };
+
+  const resetTilt = () => {
+    const card = cardRef.current;
+    if (!card) return;
+
+    ["tilt-x", "tilt-y", "shift-x", "shift-y", "glare-x", "glare-y"].forEach(
+      (name) => card.style.removeProperty(`--${name}`)
+    );
+  };
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -97,16 +123,38 @@ export default function Landing() {
         </AnimatedSection>
 
         <AnimatedWrapper direction="right">
-          <div className="relative mx-auto w-full max-w-lg">
-            <div className="absolute inset-8 rounded-full bg-blue-500/15 blur-3xl" />
-            <img
-              src="/programmer-vector4.png"
-              alt=""
-              className="relative z-10 mx-auto w-full drop-shadow-2xl"
+          <div className="relative mx-auto w-full max-w-md">
+            <div
+              aria-hidden="true"
+              className="absolute inset-8 rounded-full bg-blue-500/20 blur-3xl"
             />
-            <div className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-[#1e2749]/80 px-4 py-2 text-xs font-medium text-slate-200 shadow-xl backdrop-blur sm:bottom-8 sm:left-4 sm:translate-x-0 sm:text-sm">
-              <span className="mr-2 inline-block h-2 w-2 rounded-full bg-emerald-400" />
-              Based in Negros Occidental, PH
+            <div className="[perspective:1000px]">
+              <div
+                ref={cardRef}
+                onPointerMove={handlePointerMove}
+                onPointerLeave={resetTilt}
+                className="portrait-card group relative aspect-[10/11] w-full overflow-hidden rounded-[2rem] border border-white/10 bg-[#1e2749] shadow-2xl shadow-black/30 will-change-transform motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out motion-safe:[transform:rotateX(var(--tilt-x,0deg))_rotateY(var(--tilt-y,0deg))] motion-safe:hover:scale-[1.02] motion-safe:hover:shadow-blue-500/20"
+              >
+                <img
+                  src="/Me%20New.png"
+                  alt="Portrait of Dionisio Miñano"
+                  className="absolute inset-0 h-full w-full scale-110 object-cover object-[48%_30%] motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out motion-safe:[transform:translate3d(var(--shift-x,0px),var(--shift-y,0px),0)_scale(1.1)] motion-safe:group-hover:[transform:translate3d(var(--shift-x,0px),var(--shift-y,0px),0)_scale(1.16)]"
+                />
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 opacity-0 mix-blend-soft-light transition-opacity duration-300 group-hover:opacity-100 [background:radial-gradient(circle_at_var(--glare-x,50%)_var(--glare-y,30%),rgba(255,255,255,0.55),transparent_55%)]"
+                />
+                <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#11182f]/95 via-[#11182f]/45 to-transparent px-5 pb-5 pt-20 text-sm font-medium text-slate-200 sm:px-6 sm:pb-6">
+                  <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-yellow-300">
+                    Web Developer · Designer
+                  </span>
+                  <span className="mt-1 block">Building thoughtful digital work.</span>
+                </span>
+                <span className="absolute left-4 top-4 rounded-full border border-white/15 bg-[#11182f]/60 px-3 py-1.5 text-xs font-medium text-white backdrop-blur">
+                  <span className="mr-2 inline-block h-2 w-2 rounded-full bg-emerald-400" />
+                  Negros Occidental, PH
+                </span>
+              </div>
             </div>
           </div>
         </AnimatedWrapper>
