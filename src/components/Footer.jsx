@@ -1,16 +1,22 @@
-import React from "react";
+import { ArrowUp } from "lucide-react";
 
-function Footer() {
-    const year = new Date().getFullYear();
+export default function Footer() {
+  const year = new Date().getFullYear();
+
   return (
-    <footer class="bg-[#1e2749] text-white">
-      <div class="mx-auto px-10 py-4 flex justify-center items-center">
-        <div class="text-center md:text-left">
-          <p>&copy; {year} Dionisio Miñano Jr. All rights reserved.</p>
-        </div>
+    <footer className="border-t border-white/10 bg-[#11182f] px-6 py-6 text-white md:px-16 lg:px-32">
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
+        <p className="text-sm text-slate-400">
+          © {year} Dionisio Miñano Jr. All rights reserved.
+        </p>
+        <a
+          href="#home"
+          className="inline-flex items-center gap-2 text-sm font-medium text-slate-300 transition hover:text-yellow-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-400"
+        >
+          Back to top
+          <ArrowUp size={16} />
+        </a>
       </div>
     </footer>
   );
 }
-
-export default Footer;

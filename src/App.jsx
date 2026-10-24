@@ -14,24 +14,19 @@ function MainContent() {
   const location = useLocation();
   const isPortfolioPage = location.pathname === "/graphic-design-portfolio";
 
-  // Refs for scrolling
   const landingRef = useRef(null);
   const projectsRef = useRef(null);
   const aboutRef = useRef(null);
   const contactRef = useRef(null);
 
   const scrollToSection = (ref, offset = -64) => {
-  if (ref.current) {
-    const elementPosition = ref.current.getBoundingClientRect().top + window.pageYOffset;
-    const offsetPosition = elementPosition + offset;
+    if (!ref.current) return;
 
     window.scrollTo({
-      top: offsetPosition,
+      top: ref.current.getBoundingClientRect().top + window.scrollY + offset,
       behavior: "smooth",
     });
-  }
-};
-
+  };
 
   return (
     <>
@@ -45,16 +40,28 @@ function MainContent() {
       />
 
       {!isPortfolioPage && (
-        <>
-          <div ref={landingRef} id="home" className="min-h-screen"><Landing /></div>
-          <div ref={projectsRef} id="projects" className="min-h-screen"><Projects  /></div>
-          <div ref={aboutRef} id="about" className="min-h-screen"><About /></div>
-          <div ref={contactRef} id="contact" className="min-h-screen"><Contact /></div>
-        </>
+        <main>
+          <div ref={landingRef} id="home" className="scroll-mt-16">
+            <Landing />
+          </div>
+          <div ref={projectsRef} id="projects" className="scroll-mt-16">
+            <Projects />
+          </div>
+          <div ref={aboutRef} id="about" className="scroll-mt-16">
+            <About />
+          </div>
+          <div ref={contactRef} id="contact" className="scroll-mt-16">
+            <Contact />
+          </div>
+        </main>
       )}
 
       <Routes>
-        <Route path="/graphic-design-portfolio" element={<GraphicDesignPortfolio />} />
+        <Route path="/" element={null} />
+        <Route
+          path="/graphic-design-portfolio"
+          element={<GraphicDesignPortfolio />}
+        />
       </Routes>
 
       <Footer />

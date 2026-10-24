@@ -1,175 +1,144 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { X, ArrowLeft } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowLeft, Menu, X } from "lucide-react";
 
-const Header = ({ onScrollTo }) => {
+const sections = ["home", "projects", "about", "contact"];
+
+export default function Header({ onScrollTo }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const [activeSection, setActiveSection] = useState("home");
   const location = useLocation();
   const navigate = useNavigate();
   const isPortfolioPage = location.pathname === "/graphic-design-portfolio";
 
-  // Handle scroll
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 12);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Lock body scroll when menu is open
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "auto";
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [menuOpen]);
 
-  const handleNavClick = (section) => {
-    onScrollTo[section]?.();
+  useEffect(() => {
     setMenuOpen(false);
-  };
+  }, [location.pathname]);
 
-  const handleBack = () => {
-    window.location.href = "/";
-  };
+  useEffect(() => {
+    if (isPortfolioPage) return undefined;
 
-  const [activeSection, setActiveSection] = useState(null);
-
- useEffect(() => {
-  const timeout = setTimeout(() => {
-    const sections = ["home", "projects", "about", "contact"];
+    const observedSections = sections
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
         });
       },
-      { threshold: 0.3 }
+      { rootMargin: "-30% 0px -55% 0px" }
     );
 
-    sections.forEach((id) => {
-      const section = document.getElementById(id);
-      if (section) observer.observe(section);
-    });
-
+    observedSections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, 500); // wait for content to mount
+  }, [isPortfolioPage]);
 
-  return () => clearTimeout(timeout);
-}, []);
+  const handleNavClick = (section) => {
+    onScrollTo?.[section]?.();
+    setMenuOpen(false);
+  };
 
-
-  return (
-    <motion.header
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? "bg-white shadow-md" : "bg-[#1e2749]"
+  const navItems = sections.map((section) => (
+    <button
+      key={section}
+      type="button"
+      onClick={() => handleNavClick(section)}
+      aria-current={activeSection === section ? "location" : undefined}
+      className={`rounded-full px-4 py-2 text-sm font-medium capitalize transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-400 ${
+        activeSection === section
+          ? "bg-white/10 text-yellow-300"
+          : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
       }`}
     >
-      <div className="mx-auto px-6 md:px-16 lg:px-32 2xl:px-105 py-4 flex items-center justify-between">
-        <div className="text-2xl font-bold cursor-pointer">
-          <img
-            src={scrolled ? "/DM.png" : "/DM2.png"}
-            className="h-8 w-8 transition-all duration-300"
-          ></img>
-          {/* <span className={`${scrolled ? "text-[#1e2749]" : "text-white"}`}>DM</span> */}
-        </div>
-        {!isPortfolioPage && (
-  <ul className={`hidden md:flex gap-8 text-lg font-semibold ${scrolled ? "text-[#1e2749]" : "text-white"} items-center`}>
-    {["home", "projects", "about", "contact"].map((section) => (
-      <li key={section}>
+      {section}
+    </button>
+  ));
+
+  return (
+    <header
+      className={`fixed inset-x-0 top-0 z-50 border-b border-white/[0.08] bg-[#11182f]/90 text-white backdrop-blur-xl transition-shadow ${
+        scrolled ? "shadow-lg shadow-black/10" : ""
+      }`}
+    >
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 md:px-10 lg:px-12">
         <button
-          onClick={() => handleNavClick(section)}
-          className={`border-l-2 pl-2 transition duration-300 ease-in-out
-            ${
-              activeSection === section
-                ? "text-blue-500 border-l-blue-500"
-                : "border-transparent hover:text-blue-500 "
-            }`}
+          type="button"
+          onClick={() =>
+            isPortfolioPage ? navigate("/") : handleNavClick("home")
+          }
+          aria-label="Dionisio Miñano — home"
+          className="flex items-center gap-3 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-400"
         >
-          {section.charAt(0).toUpperCase() + section.slice(1)}
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-yellow-400 text-sm font-extrabold tracking-tight text-[#11182f]">
+            DM
+          </span>
+          <span className="hidden text-sm font-semibold tracking-wide text-white sm:inline">
+            DIONISIO MIÑANO
+          </span>
         </button>
-      </li>
-    ))}
-  </ul>
-)}
+
+        {!isPortfolioPage && (
+          <nav aria-label="Main navigation" className="hidden items-center gap-1 md:flex">
+            {navItems}
+          </nav>
+        )}
 
         {isPortfolioPage ? (
-          <button onClick={handleBack} className="transition-all">
-            <ArrowLeft
-              size={28}
-              className={`${scrolled ? "text-[#1e2749]" : "text-white"}`}
-            />
+          <button
+            type="button"
+            onClick={() => navigate("/")}
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-yellow-400 hover:text-yellow-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-400"
+          >
+            <ArrowLeft size={16} />
+            Back to portfolio
           </button>
         ) : (
           <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="transition-all md:hidden"
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-white transition hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-400 md:hidden"
           >
-            {menuOpen ? (
-              <X
-                size={28}
-                className={`transition-all duration-300 ${
-                  scrolled ? "text-[#1e2749]" : "text-white"
-                }`}
-              />
-            ) : (
-              <div className="space-y-1 group transition-all duration-300">
-                <span
-                  className={`block h-0.5 w-7 ${
-                    scrolled ? "bg-[#1e2749]" : "bg-white"
-                  } transition-all group-hover:w-4`}
-                ></span>
-                <span
-                  className={`block h-0.5 w-4 ml-3 mt-2 ${
-                    scrolled ? "bg-[#1e2749]" : "bg-white"
-                  } transition-all group-hover:w-7 group-hover:ml-0`}
-                ></span>
-              </div>
-            )}
+            {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         )}
       </div>
 
-      {/* Slide-down nav */}
-      <nav
-  className={`
-    transition-all duration-300 ease-in-out transform
-    ${
-      menuOpen && !isPortfolioPage
-        ? "translate-x-0 opacity-100 pointer-events-auto"
-        : "-translate-x-full opacity-0 pointer-events-none"
-    }
-    absolute top-full right-0 w-full z-40
-    ${scrolled ? "bg-gray-200" : "bg-white"} shadow-md pt-2 pb-4
-  `}
->
-  <ul className="flex flex-col gap-3 text-[#1e2749] font-medium items-end">
-    {["home", "projects", "about", "contact"].map((section) => (
-      <li key={section} className="w-full">
-        <button
-          onClick={() => handleNavClick(section)}
-          className={`block px-10 py-2 w-full text-right font-bold transition
-            ${
-              activeSection === section
-                ? "bg-[#1e2749] text-white"
-                : "hover:bg-[#1e2749] hover:text-white"
-            }`}
+      {!isPortfolioPage && (
+        <nav
+          id="mobile-navigation"
+          aria-label="Mobile navigation"
+          aria-hidden={!menuOpen}
+          inert={!menuOpen}
+          className={`absolute inset-x-0 top-full border-b border-white/10 bg-[#11182f]/95 px-6 py-4 shadow-xl backdrop-blur-xl transition-all duration-200 md:hidden ${
+            menuOpen
+              ? "translate-y-0 opacity-100"
+              : "pointer-events-none -translate-y-2 opacity-0"
+          }`}
         >
-          {section.charAt(0).toUpperCase() + section.slice(1)}
-        </button>
-      </li>
-    ))}
-  </ul>
-</nav>
-
-    </motion.header>
+          <div className="mx-auto flex max-w-7xl flex-col gap-1">
+            {navItems}
+          </div>
+        </nav>
+      )}
+    </header>
   );
-};
-
-export default Header;
+}
